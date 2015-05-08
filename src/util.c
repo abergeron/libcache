@@ -1,0 +1,1 @@
+void nofree(void *p) {}

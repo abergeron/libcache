@@ -5,16 +5,18 @@ struct pair {
   cache_value_t v;
 };
 
-struct cache_naive {
+typedef struct _cache_naive {
   cache c;
   size_t size;
   struct pair kv[];
-};
+} cn;
 
-static naive_add(cache *c, cache_key_ k, cache_value_t v);
-static naive_del(cache *c, cache_key_ k);
-static naive_get(cache *c, cache_key_ k);
-static naive_destroy(cache *c);
+void nofree(void *);
+
+static int naive_add(cache *c, cache_key_t k, cache_value_t v);
+static int naive_del(cache *c, cache_key_t k);
+static cache_value_t naive_get(cache *c, cache_key_t k);
+static void naive_destroy(cache *c);
 
 cache *cache_naive(size_t size, cache_eq_fn keq, cache_freek_fn kfree,
                    cache_freev_fn vfree) {
@@ -27,28 +29,35 @@ cache *cache_naive(size_t size, cache_eq_fn keq, cache_freek_fn kfree,
   c->del = naive_del;
   c->get = naive_get;
   c->destroy = naive_destroy;
-  ((cache_naive *)c)->size = size;
+  ((cn *)c)->size = size;
+  return c;
 }
 
 int naive_add(cache *_c, cache_key_t k, cache_value_t v) {
-  cache_naive *c = (cache_naive *)_c;
+  cn *c = (cn *)_c;
   for (size_t i = 0; i < c->size; i++) {
-    if (c->kv[i].k == NULL) {
+    if (c->kv[i].k == NULL || c->c.keq(k, c->kv[i].k)) {
+      if (c->kv[i].k != NULL) {
+        c->c.kfree(c->kv[i].k);
+        c->c.vfree(c->kv[i].v);
+      }
       c->kv[i].k = k;
       c->kv[i].v = v;
       return 1;
     }
   }
+  c->c.kfree(k);
+  c->c.vfree(v);
   return 0;
 }
 
 int naive_del(cache *_c, cache_key_t k) {
-  cache_naive *c = (cache_naive *)_c;
+  cn *c = (cn *)_c;
   for (size_t i = 0; i < c->size; i++) {
     if (c->kv[i].k != NULL) {
-      if (c->keq(k, c->kv[i].k)) {
-        c->kfree(c->kv[i].k);
-        c->vfree(c->kv[i].v);
+      if (c->c.keq(k, c->kv[i].k)) {
+        c->c.kfree(c->kv[i].k);
+        c->c.vfree(c->kv[i].v);
         c->kv[i].k = NULL;
         return 1;
       }
@@ -58,10 +67,10 @@ int naive_del(cache *_c, cache_key_t k) {
 }
 
 cache_value_t naive_get(cache *_c, cache_key_t k) {
-  cache_naive *c = (cache_naive *)_c;
+  cn *c = (cn *)_c;
   for (size_t i = 0; i < c->size; i++) {
     if (c->kv[i].k != NULL) {
-      if (c->keq(k, c->kv[i].k)) {
+      if (c->c.keq(k, c->kv[i].k)) {
         return c->kv[i].v;
       }
     }
@@ -70,11 +79,11 @@ cache_value_t naive_get(cache *_c, cache_key_t k) {
 }
 
 void naive_destroy(cache *_c) {
-  cache_naive *c = (cache_naive *)_c;
+  cn *c = (cn *)_c;
   for (size_t i = 0; i < c->size; i++) {
     if (c->kv[i].k != NULL) {
-      c->kfree(c->kv[i].k);
-      c->vfree(c->kv[i].v);
+      c->c.kfree(c->kv[i].k);
+      c->c.vfree(c->kv[i].v);
     }
   }
 }
