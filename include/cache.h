@@ -4,10 +4,8 @@
 #ifdef cache_EXPORTS
 # ifdef _WIN32
 #  define CACHE_API __declspec(dllexport)
-# elif defined(__clang__) || (defined(__GNUC_) && __GNUC__ >= 4)
-#  define CACHE_API __attribute__((visibility ("default")))
 # else
-#  define CACHE_API /* This is a last-resort fallback */
+#  define CACHE_API __attribute__((visibility ("default")))
 # endif
 #else
 # if defined(CACHE_STATIC) || !defined(_WIN32)
