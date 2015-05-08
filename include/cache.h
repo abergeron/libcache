@@ -1,22 +1,20 @@
 #ifndef CACHE_H
 #define CACHE_H
 
-#ifndef CACHE_BUILD_STATIC
+#ifdef cache_EXPORTS
 # ifdef _WIN32
-#  ifdef CACHE_BUILD_DLL
-#   define CACHE_API __declspec(dllexport)
-#  else
-#   define CACHE_API __declspec(dllimport)
-#  endif
+#  define CACHE_API __declspec(dllexport)
+# elif defined(__clang__) || (defined(__GNUC_) && __GNUC__ >= 4)
+#  define CACHE_API __attribute__((visibility ("default")))
 # else
-#  if defined(__clang__) || (defined(__GNUC_) && __GNUC__ >= 4)
-#   define CACHE_API __attribute__((visibility ("default")))
-#  else
-#   define CACHE_API /* This is a last-resort fallback */
-#  endif
+#  define CACHE_API /* This is a last-resort fallback */
 # endif
 #else
-# define CACHE_API /* Static build has no symbols to export */
+# if defined(CACHE_STATIC) || !defined(_WIN32)
+#  define CACHE_API /* Static build has no symbols to export */
+# else
+#  define CACHE_API __declspec(dllimport)
+# endif
 #endif
 
 #include <stdint.h>
