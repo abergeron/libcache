@@ -43,12 +43,12 @@ int naive_add(cache *_c, cache_key_t k, cache_value_t v) {
       }
       c->kv[i].k = k;
       c->kv[i].v = v;
-      return 1;
+      return 0;
     }
   }
   c->c.kfree(k);
   c->c.vfree(v);
-  return 0;
+  return 1;
 }
 
 int naive_del(cache *_c, cache_key_t k) {
