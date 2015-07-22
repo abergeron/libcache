@@ -82,11 +82,13 @@ struct _cache {
   /* Extra data goes here depending on cache type */
 };
 
+static void nofree(void *v) {}
+
 /* Cache creators */
 CACHE_API cache *cache_naive(size_t size, cache_eq_fn keq,
                              cache_freek_fn kfree, cache_freev_fn vfree);
 
-CACHE_API cache *cache_null();
+CACHE_API cache *cache_null(cache_freek_fn kfree, cache_freev_fn vfree);
 
 /* API functions */
 static inline int cache_add(cache *c, cache_key_t k, cache_value_t v) {

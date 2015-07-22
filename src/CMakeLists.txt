@@ -1,5 +1,4 @@
 set(cache_src
-  util.c
   impl/null.c
   impl/naive.c
 )
