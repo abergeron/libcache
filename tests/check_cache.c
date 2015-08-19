@@ -175,11 +175,25 @@ START_TEST(test_cache_lru)
 }
 END_TEST
 
+START_TEST(test_cache_twoq)
+{
+
+  cache *c = cache_twoq(1, 2, 1, 2, str_eq, str_hash, nofree, nofree);
+  ck_assert_ptr_ne(NULL, c);
+  ctest_validate(c);
+
+  c = cache_twoq(1, 2, 1, 1, k_eq, k_hash, k_free, v_free);
+  ck_assert_ptr_ne(NULL, c);
+  ctest_freeok(c);
+}
+END_TEST
+
 Suite *get_suite(void) {
   Suite *s = suite_create("cache");
   TCase *tc = tcase_create("All");
   tcase_add_test(tc, test_cache_naive);
   tcase_add_test(tc, test_cache_lru);
+  tcase_add_test(tc, test_cache_twoq);
   suite_add_tcase(s, tc);
   return s;
 }

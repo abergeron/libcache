@@ -2,6 +2,7 @@ set(cache_src
   impl/null.c
   impl/naive.c
   impl/lru.c
+  impl/twoq.c
 )
 
 set(libcache_ABI_MAJOR 0)

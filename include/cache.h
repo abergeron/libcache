@@ -94,6 +94,10 @@ CACHE_API cache *cache_lru(size_t max_size, size_t elasticity,
                            cache_eq_fn keq, cache_hash_fn khash,
                            cache_freek_fn kfree, cache_freev_fn vfree);
 
+CACHE_API cache *cache_twoq(size_t hot_size, size_t warm_size,
+                            size_t cold_size, size_t elasticity,
+                            cache_eq_fn keq, cache_hash_fn khash,
+                            cache_freek_fn kfree, cache_freev_fn vfree);
 /* API functions */
 static inline int cache_add(cache *c, cache_key_t k, cache_value_t v) {
   return c->add(c, k, v);
