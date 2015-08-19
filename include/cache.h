@@ -50,7 +50,7 @@ struct _cache {
    * the key will be free with the supplied free functions.
    *
    * The passed in key is not claimed by the cache and need only be
-   * valid until the call returns.  It will not be freed through the
+   * valid until the call returns. It will not be freed through the
    * key free function.
    *
    * Returns 1 if the key was in the cache and 0 if not.
@@ -61,7 +61,7 @@ struct _cache {
    * Get the data entry associated with k.
    *
    * The passed in key is not claimed by the cache and need only be
-   * valid until the call returns.  It will not be freed through the
+   * valid until the call returns. It will not be freed through the
    * key free function.
    *
    * Returns NULL if the key is not found, a value otherwise.
