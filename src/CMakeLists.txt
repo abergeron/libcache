@@ -6,7 +6,7 @@ set(cache_src
 )
 
 set(libcache_ABI_MAJOR 0)
-set(libcache_ABI_MINOR 0)
+set(libcache_ABI_MINOR 2)
 
 add_library(cache SHARED ${cache_src})
 set_target_properties(cache PROPERTIES
