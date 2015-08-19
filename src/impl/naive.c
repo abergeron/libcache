@@ -34,8 +34,9 @@ cache *cache_naive(size_t size, cache_eq_fn keq, cache_freek_fn kfree,
 }
 
 int naive_add(cache *_c, cache_key_t k, cache_value_t v) {
+  size_t i;
   cn *c = (cn *)_c;
-  for (size_t i = 0; i < c->size; i++) {
+  for (i = 0; i < c->size; i++) {
     if (c->kv[i].k == NULL || c->c.keq(k, c->kv[i].k)) {
       if (c->kv[i].k != NULL) {
         c->c.kfree(c->kv[i].k);
@@ -52,8 +53,9 @@ int naive_add(cache *_c, cache_key_t k, cache_value_t v) {
 }
 
 int naive_del(cache *_c, cache_key_t k) {
+  size_t i;
   cn *c = (cn *)_c;
-  for (size_t i = 0; i < c->size; i++) {
+  for (i = 0; i < c->size; i++) {
     if (c->kv[i].k != NULL) {
       if (c->c.keq(k, c->kv[i].k)) {
         c->c.kfree(c->kv[i].k);
@@ -67,8 +69,9 @@ int naive_del(cache *_c, cache_key_t k) {
 }
 
 cache_value_t naive_get(cache *_c, cache_key_t k) {
+  size_t i;
   cn *c = (cn *)_c;
-  for (size_t i = 0; i < c->size; i++) {
+  for (i = 0; i < c->size; i++) {
     if (c->kv[i].k != NULL) {
       if (c->c.keq(k, c->kv[i].k)) {
         return c->kv[i].v;
@@ -79,8 +82,9 @@ cache_value_t naive_get(cache *_c, cache_key_t k) {
 }
 
 void naive_destroy(cache *_c) {
+  size_t i;
   cn *c = (cn *)_c;
-  for (size_t i = 0; i < c->size; i++) {
+  for (i = 0; i < c->size; i++) {
     if (c->kv[i].k != NULL) {
       c->c.kfree(c->kv[i].k);
       c->c.vfree(c->kv[i].v);
