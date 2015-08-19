@@ -1,6 +1,7 @@
 set(cache_src
   impl/null.c
   impl/naive.c
+  impl/lru.c
 )
 
 set(libcache_ABI_MAJOR 0)

@@ -18,8 +18,10 @@ static int str_eq(void *k1, void *k2) {
 static uint32_t str_hash(void *k1) {
   uint32_t hash = 5381;
   char *p = k1;
-  while (*p != '\0')
-    hash = (hash * 33) ^ *p;
+  int c;
+
+  while ((c = *p++))
+    hash = (hash * 33) ^ c;
 
   return hash;
 }
@@ -160,10 +162,24 @@ START_TEST(test_cache_naive)
 }
 END_TEST
 
+START_TEST(test_cache_lru)
+{
+
+  cache *c = cache_lru(4, 2, str_eq, str_hash, nofree, nofree);
+  ck_assert_ptr_ne(NULL, c);
+  ctest_validate(c);
+
+  c = cache_lru(2, 1, k_eq, k_hash, k_free, v_free);
+  ck_assert_ptr_ne(NULL, c);
+  ctest_freeok(c);
+}
+END_TEST
+
 Suite *get_suite(void) {
   Suite *s = suite_create("cache");
   TCase *tc = tcase_create("All");
   tcase_add_test(tc, test_cache_naive);
+  tcase_add_test(tc, test_cache_lru);
   suite_add_tcase(s, tc);
   return s;
 }
