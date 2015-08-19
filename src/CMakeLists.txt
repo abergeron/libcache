@@ -16,3 +16,9 @@ set_target_properties(cache PROPERTIES
 )
 
 add_library(cache_static STATIC ${cache_src})
+
+INSTALL(TARGETS cache cache_static
+  RUNTIME DESTINATION bin
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib
+)

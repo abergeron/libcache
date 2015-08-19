@@ -20,3 +20,5 @@ set(CMAKE_OSX_ARCHITECTURES x86_64)
 
 add_subdirectory(src)
 add_subdirectory(tests)
+
+INSTALL(FILES include/cache.h DESTINATION include)
