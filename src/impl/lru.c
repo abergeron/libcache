@@ -273,19 +273,6 @@ static void lru_destroy(cache *_c) {
   list_clear(&c->order);
 }
 
-/* Remove an element from the cache while not releasing its storage.
-   Use with care */
-int lru_remove(cache *_c, const cache_key_t key) {
-  lru_cache *c = (lru_cache *)_c;
-  node *n = hash_find(&c->data, key, c->c.keq, c->c.khash);
-  if (n != NULL) {
-    list_remove(&c->order, n);
-    hash_del(&c->data, n, nofree, nofree, c->c.khash);
-    return 1;
-  }
-  return 0;
-}
-
 cache *cache_lru(size_t max_size, size_t elasticity,
                  cache_eq_fn keq, cache_hash_fn khash,
                  cache_freek_fn kfree, cache_freev_fn vfree) {
